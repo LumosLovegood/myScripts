@@ -16,6 +16,9 @@
 
 之前听说有豆瓣读书的官方API可以用，但是查了一下发现豆瓣官方好像很早就不再开放查询ISBN的API了，**所以就打算自己写一个获取内容的脚本**。并且自己写脚本的话拿到的东西比原来官方API返回的内容会更丰富些，也可以自定义。
 ## 使用方法
+
+B站使用帮助视频：https://www.bilibili.com/video/BV1NT4y1U7P3
+
 文件夹下有 [*Wox*](https://github.com/LumosLovegood/myScripts/tree/main/CreateReadNote/Wox%E6%8F%92%E4%BB%B6%E7%89%88%E6%9C%AC) 和 [*QuickAdd*](https://github.com/LumosLovegood/myScripts/tree/main/CreateReadNote/QuickAdd%E7%89%88%E6%9C%AC) 两个版本。
 
   最开始是用 *python* 写的 *Wox* 插件，但是后来学了学 *JS*，又写了一个 *QuickAdd* 版本的。
@@ -57,3 +60,6 @@
 ## 内容简介
 {{VALUE:intro}}
 ```
+---
+
+遇到问题或者有想法欢迎提交[issue](https://github.com/LumosLovegood/myScripts/issues)。
