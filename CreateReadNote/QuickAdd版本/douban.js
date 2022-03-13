@@ -1,3 +1,4 @@
+// Author: @Lumos
 async function douban(QuickAdd){
     const isbn = await QuickAdd.quickAddApi.inputPrompt(
         "请输入书籍背后的13位ISBN码："
@@ -12,13 +13,13 @@ async function douban(QuickAdd){
         throw new Error("无法识别此ISBN码");
     }
     let url = simpleInfo.url;
-    new Notice("准备获取《"+simpleInfo.title+"》的内容信息",5000)
+    new Notice("准备获取《"+simpleInfo.title+"》的内容信息",2000)
     let bookInfo = await getDetailInfo(url)
     if(!bookInfo){
         new Notice("获取内容失败");
         throw new Error("获取内容失败");
     }
-    new Notice("笔记已生成！",2000);
+    new Notice("笔记已生成！",500);
     // 获取今日日期
     const date = window.moment().format("gggg-MM-DD")
     bookInfo.today = date;
