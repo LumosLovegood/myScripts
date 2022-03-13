@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import re
 
 # 模板文件路径
-TEMPLATEPATH = r"asset/template.md"
+TEMPLATEPATH = r"assets/template.md"
 
 # 生成的笔记所在的目录
 SAVEDIR = r"F:/OneDrive/MyPostgraduate/3日常/读书/"
