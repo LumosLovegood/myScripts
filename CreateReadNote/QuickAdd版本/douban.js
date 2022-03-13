@@ -1,4 +1,5 @@
 // Author: @Lumos
+// Url: https://github.com/LumosLovegood
 async function douban(QuickAdd){
     const isbn = await QuickAdd.quickAddApi.inputPrompt(
         "请输入书籍背后的13位ISBN码："
