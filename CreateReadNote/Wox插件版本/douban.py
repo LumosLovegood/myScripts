@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import re
 
 # 模板文件路径
-TEMPLATEPATH = r"F:/OneDrive/MyPostgraduate/Template/ReadNote.md"
+TEMPLATEPATH = r"asset/template.md"
 
 # 生成的笔记所在的目录
 SAVEDIR = r"F:/OneDrive/MyPostgraduate/3日常/读书/"
@@ -171,7 +171,7 @@ def createNote(detailInfo:dict)-> None:
         f.write(content)
 
 if __name__ == "__main__":
-    isbn = "9787530211267" #《一个陌生女人的来信》
+    isbn = "9787210105893" #《一个陌生女人的来信》
     url = getSimpleInfo(isbn)["detailUrl"]
     from time import sleep
     sleep(2)
