@@ -14,7 +14,7 @@ async function douban(QuickAdd){
         throw new Error("无法识别此ISBN码");
     }
     let url = simpleInfo.url;
-    new Notice("准备获取《"+simpleInfo.title+"》的内容信息",2000)
+    new Notice("准备获取《"+simpleInfo.title+"》的内容信息",1000)
     let bookInfo = await getDetailInfo(url)
     if(!bookInfo){
         new Notice("获取内容失败");
@@ -152,8 +152,8 @@ async function getDetailInfo(detailUrl){
         quote1 = null;
         quote2 = null;
     }else{
-        quote1 = quoteList[0].childNodes[0].textContent.replace(/[\s(]/g,"")+"\n"+sourceList[0].textContent.replace(/\s/g,"");
-        quote2 = quoteList[1].childNodes[0].textContent.replace(/[\s(]/g,"")+"\n"+sourceList[1].textContent.replace(/\s/g,"");
+        quote1 = quoteList[0].childNodes[0].textContent.replace(/\(/g,"").trim()+"\n"+sourceList[0].textContent.replace(/\s/g,"");
+        quote2 = quoteList[1].childNodes[0].textContent.replace(/\(/g,"").trim()+"\n"+sourceList[1].textContent.replace(/\s/g,"");
     }
 
     // 标签
