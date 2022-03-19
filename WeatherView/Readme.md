@@ -22,7 +22,7 @@
 2. 安装dataview插件并启用 JavaScript 查询选项
 	![](https://github.com/LumosLovegood/myScripts/blob/main/WeatherView/assets/Pasted%20image%2020220319153553.png)
 3. 复制以下代码到想要添加天气视图的地方，并将上述下载的脚本文件路径填入代码中的`dv.view`。
-  ```js
+  ```dataviewjs
   let setting = {};
 
   //在和风天气中创建的 Api key
