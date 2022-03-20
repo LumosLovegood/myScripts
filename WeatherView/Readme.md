@@ -17,7 +17,7 @@
 2. 利用Dataview插件的 dataviewjs，处理得到的天气数据并以表格视图展示。
 ## 使用方法
 ### 基本使用
-视频演示地址：
+视频演示地址：[【Obsidian使用技巧：为你的笔记添加一个天气视图吧!-哔哩哔哩】](https://b23.tv/PLZsAkp)
 1. 下载 [weatherView.js](https://github.com/LumosLovegood/myScripts/blob/main/WeatherView/weatherView.js) 脚本文件至自己的Obsidian库中
 2. 安装dataview插件并启用 JavaScript 查询选项
 	![](https://github.com/LumosLovegood/myScripts/blob/main/WeatherView/assets/Pasted%20image%2020220319153553.png)
