@@ -33,7 +33,10 @@ async function weatherView(){
 	if(days!=1){
 		dv.paragraph(`${city} 最近 ${days} 天的天气如下，参考天气制定你的计划吧！`);
 		dv.table(["日期","天气","温度","云量","月相"],weather.map(t => [t.fxDate.substring(5),t.textDay,t.tempMin+"~"+t.tempMax+"℃",t.cloud+"%",t.moonPhase]));
+	}else{
+		addDesc=true;
 	}
+
 
 	//添加描述
 	if (addDesc){
