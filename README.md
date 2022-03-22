@@ -4,4 +4,4 @@
 ### Obsidian脚本
 - [一键生成读书笔记](https://github.com/LumosLovegood/myScripts/tree/main/CreateReadNote)
 - [为笔记添加天气视图](https://github.com/LumosLovegood/myScripts/tree/main/WeatherView)
-- [豆瓣 All in One](https://github.com/LumosLovegood/myScripts/tree/main/DoubanAllInOne)
+- [豆瓣读书电影笔记 All in One](https://github.com/LumosLovegood/myScripts/tree/main/DoubanAllInOne)
