@@ -3,6 +3,7 @@ title: {{VALUE:title}}
 originalName: {{VALUE:originalName}}
 author: {{VALUE:author}}
 transAuthor: {{VALUE:transAuthor}}
+publisher: {{VALUE:publisher}}
 rating: {{VALUE:rating}}
 tags: {{VALUE:tags}}
 RelatedBooks: {{VALUE:relatedBooks}}
