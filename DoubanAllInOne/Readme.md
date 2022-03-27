@@ -41,7 +41,7 @@
 4. 如果想要更方便的话可以使用[Button](https://github.com/shabegom/buttons)插件为这个命令添加一个按钮。
 ### 字段解释
 ##### 读书笔记模板字段解释
-参考在上一篇文档中写的[自定义模板文件部分](https://github.com/LumosLovegood/myScripts/tree/main/CreateReadNote#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6)。
+参考在上一篇文档中写的[自定义模板文件部分](https://github.com/LumosLovegood/myScripts/tree/main/CreateReadNote#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6)。此外新增获取出版社信息，使用{{VALUE:publisher}}字段。
 
 ![](https://github.com/LumosLovegood/myScripts/blob/main/DoubanAllInOne/assets/Pasted%20image%2020220327140217.png)
 
