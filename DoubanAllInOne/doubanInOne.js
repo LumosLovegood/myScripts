@@ -164,6 +164,7 @@ async function getBookInfo(url){
     let transAuthor = text.match(/(?<=译者:\s*)\S+\s?\S+/g)?text.match(/(?<=译者:\s*)\S+\s?\S+/g)[0].trim():"";
     let originalName = text.match(/(?<=原作名:\s*)[\S ]+/g)?text.match(/(?<=原作名:\s*)[\S ]+/g)[0].trim():"";
     let pages = text.match(/(?<=页数:\s*)[\S ]+/g)?text.match(/(?<=页数:\s*)[\S ]+/g)[0].trim():"";
+    let publisher = text.match(/(?<=出版社:\s*)\S+\s?\S+/g)?text.match(/(?<=出版社:\s*)\S+\s?\S+/g)[0].trim():"";
 
     //豆瓣评分
     let rating = $("div#interest_sectl div div strong")?.textContent.replace(/\s/g,"");
@@ -226,6 +227,7 @@ async function getBookInfo(url){
     bookInfo.coverUrl=cover;
     bookInfo.originalName=originalName;
     bookInfo.pages=pages;
+    bookInfo.publisher=publisher;
     bookInfo.intro=intro;
     bookInfo.isbn=isbn;
     bookInfo.rating=rating;
