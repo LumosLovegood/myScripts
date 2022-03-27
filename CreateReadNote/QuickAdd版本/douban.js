@@ -64,117 +64,97 @@ async function getBookUrl(isbn){
     return simpleInfo;
 }
 
-async function getDetailInfo(detailUrl){
-    let headers = {
-        "Content-Type": "text/html; charset=utf-8",
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'Sec-Fetch-Site': 'same-site',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-User': '?1',
-        'Sec-Fetch-Dest': 'document',
-        'Referer': 'https://m.douban.com/',
-        'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
-        }
-    let deUrl = new URL(detailUrl);
+async function getDetailInfo(url){
+    let bookUrl = new URL(url);
     const res = await request({
-        url: deUrl.href,
+        url: bookUrl.href,
         method: "GET",
         cache: "no-cache",
         headers: headers
-      });
-
+    });
     let p = new DOMParser();
     let doc = p.parseFromString(res, "text/html");
-    
-    // 书名
-    let name = doc.querySelector('h1').textContent.replace("\n","").trim();
-    let title = "\""+name+"\"";
-    
-    // 封面图片
-    let coverUrl = doc.querySelector("div#mainpic a").href;
-    
-    // 作者和译者、原作名、页数（如果有的话）
-    let spanList = doc.querySelectorAll('#info span');
-    let author='';
-    let transAuthor="Not set";
-    let originalName = title;
-    let pages = "Not set";
-    for(var j=0;j<spanList.length;j++){
-        var i = spanList[j];
-        if(i.textContent.includes("作者")&&i.nextElementSibling.textContent!=""){
-            author = i.nextElementSibling.textContent.replace(/[\s[]/g,"").replace("]"," ");
-        }
-        else if(i.textContent.includes("译者")&&i.nextElementSibling.textContent!=""){
-            transAuthor = i.nextElementSibling.textContent.replace(/[\s[]/g,"").replace("]"," ");
-        }
-        else if(i.textContent.includes("原作名")){
-            originalName = "\""+i.nextSibling.textContent.trim()+"\"";
-        }
-        else if(i.textContent.includes("页数")){
-            pages = i.nextSibling.textContent.trim();
-        }
-    }
-    
-    // ISBN号码
-    let isbn = doc.querySelector("div#info").textContent.match(/\d{10,13}/g)[0];
+    let $ = s => doc.querySelector(s);
+    let $2 = z => doc.querySelectorAll(z);
 
-    // 豆瓣评分
-    let rating = doc.querySelector("div#interest_sectl div div strong").textContent.replace(/\s/g,"");
+
+    let bookInfo = {}; 
+    //书名、作者、ISBN、封面
+    let name = $("meta[property='og:title']")?.content;
+    let title = "\""+name+"\""; //用于放到front matter里，加引号避免因为包含特殊字符导致ymal解析错误
+    let author = $("meta[property='book:author']")?.content.replace(/[\[\]\(\)（）]/g,"");
+    let isbn = $("meta[property='book:isbn']")?.content;
+    let cover = $("meta[property='og:image']")?.content;
     
-    // 简介
-    // 书籍简介
+    //其他信息(译者、原作名、页数)
+    let text = $("#info")?.textContent.replace("\n","");
+    let transAuthor = text.match(/(?<=译者:\s*)\S+\s?\S+/g)?text.match(/(?<=译者:\s*)\S+\s?\S+/g)[0].trim():"";
+    let originalName = text.match(/(?<=原作名:\s*)[\S ]+/g)?text.match(/(?<=原作名:\s*)[\S ]+/g)[0].trim():"";
+    let pages = text.match(/(?<=页数:\s*)[\S ]+/g)?text.match(/(?<=页数:\s*)[\S ]+/g)[0].trim():"";
+    let publisher = text.match(/(?<=出版社:\s*)\S+\s?\S+/g)?text.match(/(?<=出版社:\s*)\S+\s?\S+/g)[0].trim():"";
+
+    //豆瓣评分
+    let rating = $("div#interest_sectl div div strong")?.textContent.replace(/\s/g,"");
+
+    //书籍和作者简介，这一块儿不同类型的书对应的网页结构都不太一样，尽力做兼容了，还有问题我也没办法 \摊手
     let intro = "";
-    var temp1 = doc.querySelector("h2").nextElementSibling.querySelectorAll("div.intro");
-    var temp2 = temp1[temp1.length-1].querySelectorAll("p");
-    for(var i=0;i<temp2.length;i++){
-        intro = intro+temp2[i].textContent+"\n";
-    }
-    // 作者简介
     let authorIntro = "";
-    temp1 = doc.querySelectorAll("h2")[1].nextElementSibling.querySelectorAll("div.intro");
-    temp2 = temp1[temp1.length-1].querySelectorAll("p");
-    for(var i=0;i<temp2.length;i++){
-        authorIntro = authorIntro+temp2[i].textContent+"\n";
+    var temp1 = $("h2");
+    if(temp1.innerText.includes("内容简介")){
+        var temp2 = temp1.nextElementSibling.querySelectorAll("div.intro")
+        var temp3 = temp2[temp2.length-1].querySelectorAll("p");
+        for(var i=0;i<temp3.length;i++){
+            intro = intro+temp3[i].textContent+"\n";
+        }
+        try{
+            temp2 = $2("h2")[1].nextElementSibling.querySelectorAll("div.intro");
+            temp3 = temp2[temp2.length-1].querySelectorAll("p");
+            for(var i=0;i<temp3.length;i++){
+                authorIntro = authorIntro+temp3[i].textContent+"\n";
+            }
+        }catch(e){
+            new Notice("没有作者简介");
+        }        
+    }else if(temp1.innerText.includes("作者简介")){
+        var temp2 = temp1.nextElementSibling.querySelectorAll("div.intro")
+        var temp3 = temp2[temp2.length-1].querySelectorAll("p");
+        for(var i=0;i<temp3.length;i++){
+            authorIntro = authorIntro+temp3[i].textContent+"\n";
+        }
     }
 
-    // 部分原文摘录（如果有的话）
-    let quoteList = doc.querySelectorAll("figure");
-    let sourceList = doc.querySelectorAll("figcaption");
-    let quote1;
-    let quote2;
-    if(!quoteList){
-        quote1 = null;
-        quote2 = null;
-    }else{
+    //原文摘录
+    let quote1 = "";
+    let quote2 = "";
+    let quoteList = $2("figure");
+    let sourceList = $2("figcaption");
+    if(quoteList){
         quote1 = quoteList[0].childNodes[0].textContent.replace(/\(/g,"").trim()+"\n"+sourceList[0].textContent.replace(/\s/g,"");
         quote2 = quoteList[1].childNodes[0].textContent.replace(/\(/g,"").trim()+"\n"+sourceList[1].textContent.replace(/\s/g,"");
     }
 
-    // 标签
-    var temp = doc.querySelectorAll("script");
+    //豆瓣常用标签，记得之前这一块儿网页元素里是有的，后来找不到了，但是尝试性源代码全文搜索的时候 在Script标签里找到了，但是感觉随时会改。
+    var temp = $2("script");
     let tags = temp[temp.length-3].textContent.match(/(?<=:)[\u4e00-\u9fa5·]+/g);
     tags.push("book");
 
-    // 相关书籍
-    temp = doc.querySelectorAll("div#db-rec-section div dl dd");
+    //相关书籍，仿佛这个信息也没啥用，但是能加就加了
     let relatedBooks = [];
-    for(var i=0;i<temp.length;i++){
-        relatedBooks.push(temp[i].textContent.replace(/\s/g,""));
+    temp = $2("div#db-rec-section div dl dd");
+    if(temp){
+        for(var i=0;i<temp.length;i++){
+            relatedBooks.push(temp[i].textContent.replace(/\s/g,""));
+        }
     }
-    let bookInfo = {};
+
     bookInfo.name = name;
     bookInfo.title=title;
     bookInfo.author=author;
     bookInfo.transAuthor=transAuthor;
-    bookInfo.coverUrl=coverUrl;
+    bookInfo.coverUrl=cover;
     bookInfo.originalName=originalName;
     bookInfo.pages=pages;
+    bookInfo.publisher=publisher;
     bookInfo.intro=intro;
     bookInfo.isbn=isbn;
     bookInfo.rating=rating;
@@ -183,8 +163,15 @@ async function getDetailInfo(detailUrl){
     bookInfo.quote2=quote2;
     bookInfo.tags=tags;
     bookInfo.relatedBooks=relatedBooks;
-    bookInfo.link = detailUrl;
-    
+    bookInfo.link = url;
+
+    // 如果为空的话，quickadd会出现提示框让自己填，太麻烦了，所以先填一个默认空值
+    for(var i in bookInfo){
+        if(bookInfo[i]==""){
+            bookInfo[i]="Not Found.";
+        }
+    }
+
     return bookInfo;
 }
 module.exports =  douban
