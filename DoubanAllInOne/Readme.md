@@ -32,7 +32,7 @@
 	3. 在Quickadd中新建两个模板choice命令，分别对应两种类型的笔记生成
 	4. 使用QuickaddAPI的executeChoice方法，对不同选中的结果类型执行不同的choice指令
 ## 使用方法
-视频演示地址：[]()
+视频演示地址：[Obsidian使用技巧：一站式搜索并生成读书/电影笔记](https://www.bilibili.com/video/BV1E3411W7ZTb)
 ### 基本使用
 1. 安装并启用[Quickadd](https://github.com/chhoumann/quickadd)插件
 1. 在Quickadd中新建两个Template命令，命令所用的模板文件分别为[Read Note]()和[MovieNote]()，并分别命名为“CreateReadNote”和“CreateMovieNote”
