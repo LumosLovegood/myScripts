@@ -90,6 +90,12 @@ async function getWeather(city,days){
 			weather[i].textDay="🌫"+textDay;
 		}
 		switch(moon){
+			case "新月":
+				weather[i].moonPhase="🌑"+moon;
+				break;
+			case "峨眉月":
+				weather[i].moonPhase="🌒"+moon;
+				break;
 			case "朔月":
 				weather[i].moonPhase="🌑"+moon;
 				break;
