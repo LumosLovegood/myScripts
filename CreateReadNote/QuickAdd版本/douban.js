@@ -1,5 +1,22 @@
 // Author: @Lumos
 // Url: https://github.com/LumosLovegood
+const headers = {
+    "Content-Type": "text/html; charset=utf-8",
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'Sec-Fetch-Site': 'same-site',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-User': '?1',
+    'Sec-Fetch-Dest': 'document',
+    'Referer': 'https://m.douban.com/',
+    'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
+    }
+
 async function douban(QuickAdd){
     const isbn = await QuickAdd.quickAddApi.inputPrompt(
         "请输入书籍背后的13位ISBN码："
@@ -82,14 +99,14 @@ async function getDetailInfo(url){
     //书名、作者、ISBN、封面
     let name = $("meta[property='og:title']")?.content;
     let title = "\""+name+"\""; //用于放到front matter里，加引号避免因为包含特殊字符导致ymal解析错误
-    let author = $("meta[property='book:author']")?.content.replace(/[\[\]\(\)（）]/g,"");
+    let author = "\""+$("meta[property='book:author']")?.content.replace(/[\[\]\(\)（）]/g,"")+"\"";
     let isbn = $("meta[property='book:isbn']")?.content;
     let cover = $("meta[property='og:image']")?.content;
     
     //其他信息(译者、原作名、页数)
     let text = $("#info")?.textContent.replace("\n","");
     let transAuthor = text.match(/(?<=译者:\s*)\S+\s?\S+/g)?text.match(/(?<=译者:\s*)\S+\s?\S+/g)[0].trim():"";
-    let originalName = text.match(/(?<=原作名:\s*)[\S ]+/g)?text.match(/(?<=原作名:\s*)[\S ]+/g)[0].trim():"";
+    let originalName = text.match(/(?<=原作名:\s*)[\S ]+/g)?("\""+text.match(/(?<=原作名:\s*)[\S ]+/g)[0].trim()+"\""):"";
     let pages = text.match(/(?<=页数:\s*)[\S ]+/g)?text.match(/(?<=页数:\s*)[\S ]+/g)[0].trim():"";
     let publisher = text.match(/(?<=出版社:\s*)\S+\s?\S+/g)?text.match(/(?<=出版社:\s*)\S+\s?\S+/g)[0].trim():"";
 
@@ -128,9 +145,9 @@ async function getDetailInfo(url){
     let quote2 = "";
     let quoteList = $2("figure");
     let sourceList = $2("figcaption");
-    if(quoteList){
-        quote1 = quoteList[0].childNodes[0].textContent.replace(/\(/g,"").trim()+"\n"+sourceList[0].textContent.replace(/\s/g,"");
-        quote2 = quoteList[1].childNodes[0].textContent.replace(/\(/g,"").trim()+"\n"+sourceList[1].textContent.replace(/\s/g,"");
+    if(quoteList.length!=0){
+        quote1 = quoteList[0]?.childNodes[0].textContent.replace(/\(/g,"").trim()+"\n"+sourceList[0].textContent.replace(/\s/g,"");
+        quote2 = quoteList[1]?.childNodes[0].textContent.replace(/\(/g,"").trim()+"\n"+sourceList[1].textContent.replace(/\s/g,"");
     }
 
     //豆瓣常用标签，记得之前这一块儿网页元素里是有的，后来找不到了，但是尝试性源代码全文搜索的时候 在Script标签里找到了，但是感觉随时会改。
