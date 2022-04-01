@@ -1,7 +1,7 @@
 ---
 title: {{VALUE:title}}
-originalName: {{VALUE:originalName}}
-author: {{VALUE:author}}
+originalName: {{VALUE:originalNameWithQuote}}
+author: {{VALUE:authorWithQuote}}
 transAuthor: {{VALUE:transAuthor}}
 publisher: {{VALUE:publisher}}
 rating: {{VALUE:rating}}
@@ -13,6 +13,7 @@ link: {{VALUE:link}}
 cover: {{VALUE:coverUrl}}
 pages: {{VALUE:pages}}
 BeginDate: {{DATE}}
+publishDate: {{VALUE:publishDate}}
 EndDate:
 alias:
 pageprogress:
