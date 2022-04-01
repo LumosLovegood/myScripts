@@ -6,7 +6,7 @@
 - 增加出版年字段，可通过{{VALUE:publishDate}}使用
 - 将author,originalName字段改为有引号和无引号两种类型
 	- {{VALUE:authorWithQuote}}和{{VALUE:originalNameWithQuote}}，有引号的字段，用在frontmatter中
-	- {{VALUE:author}}和{{VALUE:originalName}}，无引号的字段，用在正文内容中
+	- {{VALUE:author}}和{{VALUE:originalName}}，无引号的字段，用在正文内容、笔记命名等其他非frontmatter场景中
 ### 2022年3月29日
 - 修复部分书籍没有摘录信息的情况下无法生成笔记的问题
 - 修复书名、原作名以及作者名中出现特殊字符导致yaml解析出错的问题
