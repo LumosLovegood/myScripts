@@ -154,17 +154,20 @@ async function getBookInfo(url){
     let bookInfo = {}; 
     //书名、作者、ISBN、封面
     let name = $("meta[property='og:title']")?.content;
-    let title = "\""+name+"\""; //用于放到front matter里，加引号避免因为包含特殊字符导致ymal解析错误
-    let author = "\""+$("meta[property='book:author']")?.content.replace(/[\[\]\(\)（）]/g,"")+"\"";
+    let nameWithQuote = "\""+name+"\""; //用于放到front matter里，加引号避免因为包含特殊字符导致ymal解析错误
+    let author = $("meta[property='book:author']")?.content.replace(/[\[\]\(\)（）]/g,"");
+    let authorWithQuote = "\""+author+"\"";
     let isbn = $("meta[property='book:isbn']")?.content;
     let cover = $("meta[property='og:image']")?.content;
     
     //其他信息(译者、原作名、页数)
     let text = $("#info")?.textContent.replace("\n","");
     let transAuthor = text.match(/(?<=译者:\s*)\S+\s?\S+/g)?text.match(/(?<=译者:\s*)\S+\s?\S+/g)[0].trim():"";
-    let originalName = text.match(/(?<=原作名:\s*)[\S ]+/g)?("\""+text.match(/(?<=原作名:\s*)[\S ]+/g)[0].trim()+"\""):"";
+    let originalName = text.match(/(?<=原作名:\s*)[\S ]+/g)?(text.match(/(?<=原作名:\s*)[\S ]+/g)[0].trim()):"";
+    let originalNameWithQuote = "\""+originalName+"\"";
     let pages = text.match(/(?<=页数:\s*)[\S ]+/g)?text.match(/(?<=页数:\s*)[\S ]+/g)[0].trim():"";
     let publisher = text.match(/(?<=出版社:\s*)\S+\s?\S+/g)?text.match(/(?<=出版社:\s*)\S+\s?\S+/g)[0].trim():"";
+    let publishDate = text.match(/(?<=出版年:\s*)[\S ]+/g)?text.match(/(?<=出版年:\s*)[\S ]+/g)[0].trim():"";
 
     //豆瓣评分
     let rating = $("div#interest_sectl div div strong")?.textContent.replace(/\s/g,"");
@@ -221,11 +224,14 @@ async function getBookInfo(url){
     }
 
     bookInfo.name = name;
-    bookInfo.title=title;
+    bookInfo.title = nameWithQuote;
+    bookInfo.nameWithQuote=nameWithQuote;
     bookInfo.author=author;
+    bookInfo.authorWithQuote = authorWithQuote;
     bookInfo.transAuthor=transAuthor;
     bookInfo.coverUrl=cover;
     bookInfo.originalName=originalName;
+    bookInfo.originalNameWithQuote = originalNameWithQuote;
     bookInfo.pages=pages;
     bookInfo.publisher=publisher;
     bookInfo.intro=intro;
@@ -237,6 +243,7 @@ async function getBookInfo(url){
     bookInfo.tags=tags;
     bookInfo.relatedBooks=relatedBooks;
     bookInfo.link = url;
+    bookInfo.publishDate = publishDate
 
     // 如果为空的话，quickadd会出现提示框让自己填，太麻烦了，所以先填一个默认空值
     for(var i in bookInfo){
