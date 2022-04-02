@@ -199,6 +199,11 @@ async function getBookInfo(url){
         }
     }
 
+    //目录信息
+    let doubanID = url.match(/\d+/g)[0];
+    let catalog = "";
+    catalog = $(`#dir_${doubanID}_full`)?.innerText?.replace(/^\s+|· *|\(收起\)$/gm,"");
+
     //原文摘录
     let quote1 = "";
     let quote2 = "";
@@ -243,11 +248,12 @@ async function getBookInfo(url){
     bookInfo.tags=tags;
     bookInfo.relatedBooks=relatedBooks;
     bookInfo.link = url;
-    bookInfo.publishDate = publishDate
+    bookInfo.publishDate = publishDate;
+    bookInfo.catalog = catalog;
 
     // 如果为空的话，quickadd会出现提示框让自己填，太麻烦了，所以先填一个默认空值
     for(var i in bookInfo){
-        if(bookInfo[i]==""){
+        if(bookInfo[i]==""||bookInfo[i]==null){
             bookInfo[i]="Not Found.";
         }
     }
