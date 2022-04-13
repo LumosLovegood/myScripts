@@ -8,6 +8,14 @@
   * [使用方法](#使用方法)
     + [基本使用](#基本使用)
     + [字段解释](#字段解释)
+
+## 更新记录
+### 2022年4月13日
+之前的版本中使用`{{VALUE:title}}`变量给生成的笔记命名时，可能会因为视频标题中存在非法字符（\ / ? " < > |）而导致笔记创建失败
+
+现已新增字段`{{VALUE:filename}`，将标题中的非法字符统一替换为“_”，建议使用这个字段用于笔记命名
+
+![](https://user-images.githubusercontent.com/50430853/163104168-7c2ebb86-f9ef-4e62-9563-4eb14f4bcf4e.png)
 ## 简介
 一个用于获取B站视频信息，配合[Media Extend插件](https://github.com/aidenlx/media-extended)以及其[B站视频拓展插件](https://github.com/aidenlx/mx-bili-plugin)做时间戳笔记的脚本。
 ![Pasted image 20220410214411.png](https://github.com/LumosLovegood/myScripts/blob/main/BilibiliVideo/assets/Pasted%20image%2020220410214411.png)
