@@ -29,7 +29,7 @@ async function bilibili(QuickAdd){
         throw new Error("获取内容失败");
     }
     new Notice(biliInfo.title+"笔记已生成！",500);
-
+    console.log(biliInfo);
     QuickAdd.variables = {
         ...biliInfo
     };
@@ -70,6 +70,8 @@ async function getBiliInfo(url){
     biliInfo.intro = $("meta[itemprop='description']")?.content;
     biliInfo.cover = $("meta[property='og:image']")?.content;
     biliInfo.parts = parts;
+    biliInfo.filename = biliInfo.title.replace(/[\\\/\:\*\?\"\<\>\|]/g,"_");
+    
     return biliInfo;
 
 }
