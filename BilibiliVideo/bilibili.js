@@ -52,9 +52,9 @@ async function getBiliInfo(url){
 
     let mainUrl = url.match(/^.+\?/g)
     let parts = "没有找到分集信息🔍";
-    let partList = doc.querySelectorAll("script")[4].textContent.match(/(?<=part\":\").+?(?=\")/g);
+    let partList = doc.querySelectorAll("script")[3].textContent.match(/(?<=part\":\").+?(?=\")/g);
     console.log(partList);
-    if(partList.length!=0){
+    if(partList?.length!=undefined){
         parts = "";
         for(var i=0;i<partList.length;i++){
             parts += `[P${i+1}📺 ${partList[i]}](${mainUrl}p=${i+1})\n`;
@@ -63,7 +63,7 @@ async function getBiliInfo(url){
 
 
     let biliInfo={};
-    biliInfo.link = url.match(/^.+(?=\?)/g);
+    biliInfo.link = url.match(/^.+(?=\?)/g) || url;
     biliInfo.videoDate = $("meta[itemprop='datePublished']")?.content;
     biliInfo.title = $(".tit").textContent;
     biliInfo.author = $(".username").innerText.replace(/(^\s*)|(\s*$)/g,"");
