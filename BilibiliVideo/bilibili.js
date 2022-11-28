@@ -18,8 +18,8 @@ async function bilibili(QuickAdd){
     const url = await QuickAdd.quickAddApi.inputPrompt(
         "输入Bilibili视频网址："
     );
-    let urlTest = url.match(/^https*:\/\/www\.bilibili\.com\/video.*/g);
-    if (urlTest.length==0){
+    let urlTest = url?.match(/^https*:\/\/www\.bilibili\.com\/video.*/g);
+    if (url.length==0 || urlTest.length==0){
         new Notice("网址格式错误");
         throw new Error("网址格式错误");
     }
@@ -50,28 +50,30 @@ async function getBiliInfo(url){
     let doc = p.parseFromString(res, "text/html");
     let $ = s => doc.querySelector(s);
 
-    let mainUrl = url.match(/^.+\?/g)
-    let parts = "没有找到分集信息🔍";
-    let partList = doc.querySelectorAll("script")[3].textContent.match(/(?<=part\":\").+?(?=\")/g);
-    console.log(partList);
-    if(partList?.length!=undefined){
-        parts = "";
-        for(var i=0;i<partList.length;i++){
-            parts += `[P${i+1}📺 ${partList[i]}](${mainUrl}p=${i+1})\n`;
+    let mainUrl = url.match(/^.+[\?$]/g)
+    let parts = "";;
+    if($('h3')) {
+        let partList = doc.querySelectorAll("script")[3].textContent.match(/(?<=part\":\").+?(?=\")/g);
+        console.log(partList);
+        if(partList?.length!=undefined){
+            for(var i=0;i<partList.length;i++){
+                parts += `[P${i+1}📺 ${partList[i]}](${mainUrl.replace(/\?$/, '')}?p=${i+1})\n`;
+            }
         }
     }
 
-
     let biliInfo={};
     biliInfo.link = url.match(/^.+(?=\?)/g) || url;
-    biliInfo.videoDate = $("meta[itemprop='datePublished']")?.content;
+    biliInfo.date = $("meta[itemprop='datePublished']")?.content;
+    biliInfo.videoDate = biliInfo.date;
     biliInfo.title = $(".tit").textContent;
     biliInfo.author = $(".username").innerText.replace(/(^\s*)|(\s*$)/g,"");
-    biliInfo.intro = $("meta[itemprop='description']")?.content;
-    biliInfo.cover = $("meta[property='og:image']")?.content;
-    biliInfo.parts = parts;
+    biliInfo.content = $("div#v_desc")?.textContent?.trim()?.replace(/收起$/, '');
+    biliInfo.intro = biliInfo.content;
+    biliInfo.cover = '"http:' + $("meta[property='og:image']")?.content?.replace(/@.*/, '') + '"';
+    biliInfo.parts = parts === '' ? biliInfo.link : parts;
     biliInfo.filename = biliInfo.title.replace(/[\\\/\:\*\?\"\<\>\|]/g,"_");
-    
+
     return biliInfo;
 
 }
