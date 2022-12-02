@@ -18,7 +18,7 @@ async function bilibili(QuickAdd){
     const url = await QuickAdd.quickAddApi.inputPrompt(
         "输入Bilibili视频网址："
     );
-    let urlTest = url?.match(/^https*:\/\/www\.bilibili\.com\/video.*/g);
+    let urlTest = url?.match(/https?:\/\/(?:(?:www|m)\.bilibili\.com\/video\/\S*\??|b23\.tv\/\S*)/gm);
     if (url.length==0 || urlTest.length==0){
         new Notice("网址格式错误");
         throw new Error("网址格式错误");
