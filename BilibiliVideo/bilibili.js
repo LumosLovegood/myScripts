@@ -50,7 +50,7 @@ async function getBiliInfo(url){
     let doc = p.parseFromString(res, "text/html");
     let $ = s => doc.querySelector(s);
 
-    let mainUrl = url.match(/^.+[\?$]/g)
+    let mainUrl = url.match(/^.+[\?$]/g)[0]
     let parts = "";;
     if($('h3')) {
         let partList = doc.querySelectorAll("script")[3].textContent.match(/(?<=part\":\").+?(?=\")/g);
